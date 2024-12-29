@@ -21,18 +21,16 @@ public class UpdateProductCommandValidator : AbstractValidator<UpdateProductComm
     }
 }
 internal class UpdateProductCommandHandler
-    (IDocumentSession session, ILogger<UpdateProductCommandHandler> logger)
+    (IDocumentSession session)
     : ICommandHandler<UpdateProductCommand, UpdateProductResult>
 {
     public async Task<UpdateProductResult> Handle(UpdateProductCommand command, CancellationToken cancellationToken)
     {
-        logger.LogInformation("UpdateProductHandler.Handle called with {@Command}", command);
-
         var product = await session.LoadAsync<Product>(command.id, cancellationToken);
 
         if (product is null)
         {
-            throw new ProductNotFoundException();
+            throw new ProductNotFoundException(command.id);
         }
 
         product.Name = command.Name;

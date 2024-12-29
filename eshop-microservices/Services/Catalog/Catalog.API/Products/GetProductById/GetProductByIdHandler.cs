@@ -4,7 +4,7 @@ public record GetProductByIdQuery(Guid id) : IQuery<GetProductByIdResult>;
 public record GetProductByIdResult(Product Product);
 
 internal class GetProductByIdQueryHandler
-    (IDocumentSession documentSession, ILogger<GetProductByIdQueryHandler> logger) : IQueryHandler<GetProductByIdQuery, GetProductByIdResult>
+    (IDocumentSession documentSession) : IQueryHandler<GetProductByIdQuery, GetProductByIdResult>
 {
     public async Task<GetProductByIdResult> Handle(GetProductByIdQuery query, CancellationToken cancellationToken)
     {
@@ -12,7 +12,7 @@ internal class GetProductByIdQueryHandler
 
         if (product is null)
         {
-            throw new ProductNotFoundException();
+            throw new ProductNotFoundException(query.id);
         }
 
         return new GetProductByIdResult(product);
