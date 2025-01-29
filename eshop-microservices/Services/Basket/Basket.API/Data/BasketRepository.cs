@@ -9,6 +9,7 @@ public class BasketRepository(IDocumentSession session)
 		session.Delete<ShoppingCart>(userName);
 		await session.SaveChangesAsync(cancellationToken);
 		return true;
+
 	}
 	public async Task<ShoppingCart> GetBasket(string userName, CancellationToken cancellationToken = default)
 	{
